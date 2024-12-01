@@ -24,7 +24,7 @@ rm /etc/asterisk/extensions.conf
 
 cd /etc/asterisk/
 
-wget https://raw.githubusercontent.com/amirhosseinchoghaei/sip-server-router/main/extensions.conf
+wget https://raw.githubusercontent.com/Unicron33/diplome/refs/heads/main/extensions.conf
 
 echo "[simpletrans]
 type=transport
