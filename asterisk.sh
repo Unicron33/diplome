@@ -9,7 +9,6 @@ GRAY='\033[0;37m'
 NC='\033[0m' # No Color
 
 
-
 echo "Running as root..."
 sleep 2
 clear
