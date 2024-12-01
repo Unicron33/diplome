@@ -28,7 +28,7 @@ case $choice in
     else
         echo -e "${RED} ERROR: ${user} is not a 4-digit number! ${NC}"
         sleep 3
-        /sbin/sip.sh
+        gip
         exit 1
     fi
 
@@ -38,7 +38,7 @@ case $choice in
     if [ "$USR" == "$user" ]; then
         echo -e "${RED} ERROR: User ${user} already exists ${NC}"
         sleep 3
-        /sbin/sip.sh
+        gip
         exit 1
     else
         # Создание нового SIP-пользователя
