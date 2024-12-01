@@ -68,7 +68,7 @@ username=${user} ;${user}
 
     service asterisk restart
     sleep 3
-    /sbin/gip.sh
+    gip
     ;;
 
 2)
@@ -80,7 +80,7 @@ username=${user} ;${user}
     else
         echo -e "${RED} ERROR: ${dele} is not a 4-digit number! ${NC}"
         sleep 3
-        /sbin/gip.sh
+        gip
         exit 1
     fi
 
@@ -95,13 +95,13 @@ username=${user} ;${user}
         echo -e "${RED} ERROR: User ${dele} does not exist ${NC}"
     fi
     sleep 3
-    /sbin/gip.sh
+    gip
     ;;
 
 3)
     asterisk -rx "pjsip list endpoints"
     sleep 3
-    /sbin/gip.sh
+    gip
     ;;
 
 4)
@@ -112,6 +112,6 @@ username=${user} ;${user}
 *)
     echo -e "${RED} Invalid option! ${NC}"
     sleep 2
-    /sbin/gip.sh
+    gip
     ;;
 esac
