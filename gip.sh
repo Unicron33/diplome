@@ -5,7 +5,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
- 
+
 clear
 
 echo -e "${YELLOW} SIP Server Manager ${NC}"
@@ -28,7 +28,6 @@ case $choice in
     else
         echo -e "${RED} ERROR: ${user} is not a 4-digit number! ${NC}"
         sleep 3
-        /sbin/sip.sh
         exit 1
     fi
 
@@ -38,7 +37,6 @@ case $choice in
     if [ "$USR" == "$user" ]; then
         echo -e "${RED} ERROR: User ${user} already exists ${NC}"
         sleep 3
-        /sbin/sip.sh
         exit 1
     else
         # Создание нового SIP-пользователя
@@ -66,9 +64,16 @@ username=${user} ;${user}
         echo -e "${GREEN} User ${user} Created Successfully ${NC}"
     fi
 
+    # Проверяем, запущен ли Asterisk, если нет — запускаем его
+    if ! pgrep -x "asterisk" > /dev/null; then
+        echo -e "${YELLOW} Starting Asterisk... ${NC}"
+        service asterisk start
+    fi
+
+    # Перезапуск Asterisk
     service asterisk restart
     sleep 3
-    gip
+    exit 0
     ;;
 
 2)
@@ -80,7 +85,6 @@ username=${user} ;${user}
     else
         echo -e "${RED} ERROR: ${dele} is not a 4-digit number! ${NC}"
         sleep 3
-        gip
         exit 1
     fi
 
@@ -95,13 +99,13 @@ username=${user} ;${user}
         echo -e "${RED} ERROR: User ${dele} does not exist ${NC}"
     fi
     sleep 3
-    gip
+    exit 0
     ;;
 
 3)
     asterisk -rx "pjsip list endpoints"
     sleep 3
-    gip
+    exit 0
     ;;
 
 4)
@@ -112,6 +116,6 @@ username=${user} ;${user}
 *)
     echo -e "${RED} Invalid option! ${NC}"
     sleep 2
-    gip
+    exit 1
     ;;
 esac
