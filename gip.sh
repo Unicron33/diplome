@@ -17,7 +17,6 @@ echo -e "${YELLOW} 2.${NC} ${CYAN} Delete SIP User ${NC}"
 echo -e "${YELLOW} 3.${NC} ${CYAN} Show Users ${NC}"
 echo -e "${YELLOW} 4.${NC} ${RED} EXIT ${NC}"
 echo ""
-echo -e "${YELLOW} >${NC} ${MAGENTA} Telegrma : @AmirHosseinTSL ${NC}"
 
 echo " "
  read -p " -Enter option number: " choice
