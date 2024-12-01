@@ -51,4 +51,3 @@ rm -f gip.sh && wget https://raw.githubusercontent.com/amirhosseinchoghaei/sip-s
 
 cp gip.sh /sbin/gip
 
-echo -e "${GREEN} Made With Love By : AmirHossein Choghaei ${NC}"
