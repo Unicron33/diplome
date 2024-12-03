@@ -63,8 +63,16 @@ cat << 'EOF' > /etc/init.d/asterisk_autorun
 START=50
 
 start() {
+    echo "Ensuring /var/run/asterisk exists..."
+    mkdir -p /var/run/asterisk
+    chmod 755 /var/run/asterisk
+
     echo "Restoring pjsip.conf from backup..."
     cp /root/pjsip.conf /etc/asterisk/pjsip.conf
+
+    echo "Waiting for system stabilization..."
+    sleep 5
+
     echo "Starting Asterisk..."
     service asterisk start
 }
