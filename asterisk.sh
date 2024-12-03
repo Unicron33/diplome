@@ -4,10 +4,7 @@
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-MAGENTA='\033[0;35m'
 CYAN='\033[0;36m'
-GRAY='\033[0;37m'
 NC='\033[0m' # No Color
 
 echo -e "${YELLOW}Running as root...${NC}"
@@ -20,22 +17,28 @@ opkg update
 # Установка необхідних компонентів Asterisk
 opkg install asterisk asterisk-pjsip asterisk-bridge-simple asterisk-codec-alaw asterisk-codec-ulaw asterisk-res-rtp-asterisk
 
-# Видалення старого конфігураційного файлу extensions.conf і створення нового pjsip.conf
-rm /etc/asterisk/extensions.conf
-> /etc/asterisk/pjsip.conf
+# Перевірка, чи існує резервна копія pjsip.conf
+if [ -f /root/pjsip.conf ]; then
+    echo -e "${CYAN}Restoring pjsip.conf from backup...${NC}"
+    cp /root/pjsip.conf /etc/asterisk/pjsip.conf
+else
+    echo -e "${CYAN}Creating new pjsip.conf...${NC}"
+    > /etc/asterisk/pjsip.conf
+    echo "[simpletrans]
+type=transport
+protocol=udp
+bind=0.0.0.0
+" >> /etc/asterisk/pjsip.conf
+
+    # Зберігаємо резервну копію
+    cp /etc/asterisk/pjsip.conf /root/pjsip.conf
+fi
 
 # Перехід до каталогу конфігурації Asterisk
 cd /etc/asterisk/
 
 # Завантаження файлу extensions.conf з репозиторію
-wget https://raw.githubusercontent.com/Unicron33/diplome/refs/heads/main/extensions.conf
-
-# Додавання транспортного протоколу до файлу pjsip.conf
-echo "[simpletrans]
-type=transport
-protocol=udp
-bind=0.0.0.0
-" >> /etc/asterisk/pjsip.conf
+wget -O extensions.conf https://raw.githubusercontent.com/Unicron33/diplome/refs/heads/main/extensions.conf
 
 # Увімкнення Asterisk через систему налаштувань OpenWRT
 uci set asterisk.general.enabled='1'
@@ -60,6 +63,8 @@ cat << 'EOF' > /etc/init.d/asterisk_autorun
 START=50
 
 start() {
+    echo "Restoring pjsip.conf from backup..."
+    cp /root/pjsip.conf /etc/asterisk/pjsip.conf
     echo "Starting Asterisk..."
     service asterisk start
 }
