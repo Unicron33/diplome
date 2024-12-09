@@ -18,6 +18,12 @@ echo -e "${YELLOW} 3.${NC} ${CYAN} Show Users ${NC}"
 echo -e "${YELLOW} 4.${NC} ${RED} EXIT ${NC}"
 echo ""
 
+# Перевірка наявності резервної копії pjsip.conf
+if [ ! -f /etc/asterisk/pjsip.conf ]; then
+    echo -e "${CYAN}Restoring pjsip.conf from backup...${NC}"
+    cp /root/pjsip.conf /etc/asterisk/pjsip.conf
+fi
+
 # Читання вибору користувача
 read -p " -Enter option number: " choice
 
@@ -27,7 +33,6 @@ case $choice in
     # Створення нового SIP користувача
     read -p " -Enter SIP User (4 digits number): " user
     read -p " -Enter SIP Password: " pass
-    
     # Перевірка чи було введено 4 цифри
     if echo "$user" | grep -qE '^[0-9]{4}$'; then
         sleep 1
@@ -48,7 +53,6 @@ case $choice in
         gip
         exit 1
     else
-    
         # Додавання нового користувача до файлу конфігурації Asterisk
         echo "[${user}] ;${user}
 type = endpoint ;${user}
@@ -83,7 +87,6 @@ username=${user} ;${user}
     # Видалення існуючого SIP користувача
     read -p " -Enter SIP User to delete: " dele
 
-   
     if echo "$dele" | grep -qE '^[0-9]{4}$'; then
         sleep 1
     else
@@ -92,13 +95,12 @@ username=${user} ;${user}
         gip
         exit 1
     fi
-    
+
     # Перевірка, чи існує такий користувач
     PUSR=$(grep -o "aors = ${dele}" /etc/asterisk/pjsip.conf | grep -o '[[:digit:]]*' | sed -n '1p')
     sleep 1
 
     if [ "$PUSR" == "$dele" ]; then
-    
         # Видалення запису про користувача з конфігурації Asterisk
         sed -i "/;$dele/d" /etc/asterisk/pjsip.conf
         echo -e "${GREEN} User ${dele} Deleted Successfully ${NC}"
@@ -129,4 +131,5 @@ username=${user} ;${user}
     sleep 2
     gip
     ;;
+
 esac
