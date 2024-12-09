@@ -80,7 +80,7 @@ username=${user} ;${user}
     fi
     # Перезапуск служби Asterisk для застосування змін
     service asterisk restart
-    sleep 3
+    read -p "Press Enter to continue..." # Залишаємо на екрані до натискання Enter
     gip
     ;;
 
@@ -109,14 +109,14 @@ username=${user} ;${user}
     else
         echo -e "${RED} ERROR: User ${dele} does not exist ${NC}"
     fi
-    sleep 3
+    read -p "Press Enter to continue..." # Залишаємо на екрані до натискання Enter
     gip
     ;;
 
 3)
     # Показ існуючих SIP користувачів
     asterisk -rx "pjsip list endpoints"
-    sleep 3
+    read -p "Press Enter to continue..." # Залишаємо на екрані до натискання Enter
     gip
     ;;
 
@@ -131,7 +131,7 @@ username=${user} ;${user}
     sipp -sn uac -r $calls -s $user -p 5060 -i 192.168.5.2 $ip
     echo -e "${GREEN} Test completed! ${NC}"
 
-    sleep 3
+    read -p "Press Enter to continue..." # Залишаємо на екрані до натискання Enter
     gip
     ;;
 
