@@ -15,7 +15,8 @@ echo -e "${YELLOW} SIP Server Manager ${NC}"
 echo -e "${YELLOW} 1.${NC} ${CYAN} New SIP User ${NC}"
 echo -e "${YELLOW} 2.${NC} ${CYAN} Delete SIP User ${NC}"
 echo -e "${YELLOW} 3.${NC} ${CYAN} Show Users ${NC}"
-echo -e "${YELLOW} 4.${NC} ${RED} EXIT ${NC}"
+echo -e "${YELLOW} 4.${NC} ${CYAN} Test Multiple SIP Calls ${NC}" # Новий пункт для тестування багатопоточних викликів
+echo -e "${YELLOW} 5.${NC} ${RED} EXIT ${NC}"
 echo ""
 
 # Перевірка наявності резервної копії pjsip.conf
@@ -119,7 +120,22 @@ username=${user} ;${user}
     gip
     ;;
 
-4)  
+4)
+    # Тестування багатопоточних SIP викликів
+    echo -e "${CYAN} Starting SIPp Test with multiple simultaneous calls... ${NC}"
+    read -p " -Enter number of simultaneous calls: " calls
+    read -p " -Enter the SIP user (e.g., 1111): " user
+    read -p " -Enter the SIP server IP: " ip
+
+    echo -e "${CYAN} Running SIPp with $calls calls... ${NC}"
+    sipp -sn uac -r $calls -s $user -p 5060 -i 192.168.5.2 $ip
+    echo -e "${GREEN} Test completed! ${NC}"
+
+    sleep 3
+    gip
+    ;;
+
+5)  
     # Вихід з програми
     echo -e "${GREEN}Exiting...${NC}"
     exit 0
